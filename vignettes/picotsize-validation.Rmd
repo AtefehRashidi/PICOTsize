@@ -1,0 +1,165 @@
+---
+title: "Validating PICOTsize against Bhardwaj et al. (2024)"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Validating PICOTsize against Bhardwaj et al. (2024)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+
+{r setup}
+library(PICOTsize)
+
+
+## Purpose
+
+This vignette reproduces every worked numeric example in
+Bhardwaj et al. (2024), *Determination of sample size for various
+study designs in medical research: A practical primer*
+(*J Family Med Prim Care*, 2024;13:2555-61), using this package,
+and documents the small number of places where the two disagree.
+None of these disagreements are bugs; each is explained below,
+with the reasoning for which value is methodologically correct.
+
+## 1. Cross-sectional, binary outcome
+
+Paper's example: prevalence 30%, 5% absolute precision, 95% CI,
+10% dropout.
+
+{r}
+calc_crosssectional_binary(p = 0.30, precision = 0.05,
+                            dropout_rate = 0.10)
+
+
+The paper reports a raw n of 323 (matches exactly) and a
+dropout-adjusted n of 355. This package reports 359, because it
+uses the statistically correct dropout formula n / (1 - d) rather
+than the approximation n * (1 + d) used in the paper's worked
+example (see Section 5).
+
+## 2. Cross-sectional, continuous outcome
+
+Paper's example: SD = 3, precision = 0.5, 95% CI, 10% dropout.
+
+{r}
+calc_crosssectional_continuous(mean = 120, sd = 3, precision = 0.5,
+                                dropout_rate = 0.10)
+
+
+The paper reports 138.29, truncated to 138. This package rounds up
+(the conventional rule for sample size, since a fractional
+participant cannot be enrolled), giving 139 (see Section 6).
+
+## 3. Case-control
+
+Paper's example: 25% exposed in controls, 40% exposed in cases,
+equal groups, 80% power, 10% dropout.
+
+{r}
+calc_casecontrol(p_exposed_controls = 0.25, p_exposed_cases = 0.40,
+                  dropout_rate = 0.10)
+
+
+The paper's normal-approximation formula gives 153 per group (306
+total, before dropout). epiR::epi.sscc() uses the more precise
+method of Dupont (1988), giving a very close but not identical
+result. Differences of a handful of subjects between the two
+methods are expected and are not errors.
+
+## 4. Cohort
+
+Paper's example: 20% incidence unexposed, 30% incidence exposed,
+equal groups, 80% power, 10% dropout.
+
+{r}
+calc_cohort(incidence_unexposed = 0.20, incidence_exposed = 0.30,
+            dropout_rate = 0.10)
+
+
+As with case-control, the small difference from the paper's total
+of 586 (raw, before dropout) reflects epiR's use of the more
+precise method of Woodward (2014).
+
+## 5. Clinical trials
+
+Paper's examples (cancer survival, 45% vs 61%, 10% margin):
+
+{r}
+calc_trial_superiority(p_standard = 0.45, p_new = 0.61,
+                        delta = 0.10, sided_test = 1)
+calc_trial_noninferiority(p_standard = 0.45, p_new = 0.45,
+                           delta = 0.10)
+calc_trial_equivalence(p_standard = 0.45, p_new = 0.45,
+                        delta = 0.10)
+
+
+Bhardwaj et al. (2024) treat superiority trials as one-sided
+tests. Current regulatory guidance (and epiR's own documentation)
+favours two-sided testing for superiority trials. This package
+defaults to two-sided (sided_test = 2) but exposes the argument
+so the paper's convention can be reproduced exactly, as shown
+above with sided_test = 1.
+
+Non-inferiority and equivalence trials are inherently one-sided
+and two-sided respectively in both the paper and epiR, so no
+such choice is needed for those designs.
+
+## 6. Diagnostic test accuracy
+
+Paper's example: sensitivity 80%, specificity 90%, prevalence 20%,
+5% absolute margin of error.
+
+{r}
+calc_diagnostic_accuracy(expected_sensitivity = 0.80,
+                          expected_specificity = 0.90,
+                          prevalence = 0.20, precision = 0.05)
+Bhardwaj et al. (2024) calculate the sample size needed for
+sensitivity and for specificity separately, then add the two
+together (1229 + 172 = 1401). This package instead follows Buderer
+(1996) and Hajian-Tilaki (2014), taking the larger of the two
+values, because both sensitivity and specificity are estimated
+from the same group of study subjects rather than two independent
+samples -- so no summing is needed. This is not a difference of
+approximation methods, but a methodological correction.
+
+## Summary
+
+| Design | Paper (raw) | Package (raw) | Paper (final) | Package (final) |
+|---|---|---|---|---|
+| Cross-sectional (binary) | 323 | 323 | 355 | 359 |
+| Cross-sectional (continuous) | 138 | 139 | 152 | 155 |
+| Case-control | 153/grp (306) | 304 | 336 | 338 |
+| Cohort | 293/grp (586) | 588 | 644 | 654 |
+| Trial, superiority (1-sided) | 1704 | 1668 | n/a | n/a |
+| Trial, non-inferiority | 614 | 614 | n/a | n/a |
+| Trial, equivalence | 776 | 848 | n/a | n/a |
+| Diagnostic accuracy | 1401 | 1230 | n/a | n/a |
+
+"n/a" for trial designs' final n: Bhardwaj et al. (2024) do not
+apply a dropout adjustment in their worked trial examples.
+
+## References
+
+Bhardwaj R, Agrawal U, Vashist P, Manna S. Determination of sample
+size for various study designs in medical research: A practical
+primer. *J Family Med Prim Care*. 2024;13:2555-61.
+
+Buderer NM. Statistical methodology: I. Incorporating the
+prevalence of disease into the sample size calculation for
+sensitivity and specificity. *Acad Emerg Med*. 1996;3:895-900.
+
+Dupont WD. Power calculations for matched case-control studies.
+*Biometrics*. 1988;44:1157-68.
+
+Hajian-Tilaki K. Sample size estimation in diagnostic test studies
+of biomedical informatics. *J Biomed Inform*. 2014;48:193-204.
+
+Woodward M. *Epidemiology: Study Design and Data Analysis*. 3rd
+ed. Chapman and Hall/CRC; 2014.

@@ -1,0 +1,52 @@
+
+{r, include = FALSE} knitr::opts_chunk\$set( collapse = TRUE, comment =
+“\#\>”, fig.path = “man/figures/README-” )
+
+# PICOTsize
+
+<!-- badges: start -->
+
+<!-- badges: end -->
+
+PICOTsize is an R package and Shiny app for calculating sample sizes
+across the study designs covered by the PICOT framework:
+cross-sectional, case-control, cohort, superiority/non-inferiority/
+equivalence clinical trials, and diagnostic test accuracy studies.
+
+It follows the sample size formulas described in Bhardwaj et al. (2024),
+*Determination of sample size for various study designs in medical
+research: A practical primer*, *J Family Med Prim Care*, using
+[epiR](https://cran.r-project.org/package=epiR) as a validated
+computational backend rather than reimplementing formulas from scratch.
+Every calculation is checked against the paper’s own worked examples –
+see the Validation tab in the app, or the package vignette, for a full
+comparison and an explanation of the handful of places where this
+package’s output differs from the paper (and why).
+
+## Installation
+
+You can install the development version of PICOTsize from
+[GitHub](https://github.com/AtefehRashidi) with:
+
+{r, eval = FALSE} \# install.packages(“remotes”)
+remotes::install_github(“your-username/PICOTsize”)
+
+## Using the package directly
+
+Every calculation is available as a plain R function, independent of the
+Shiny app:
+
+{r example} library(PICOTsize)
+
+calc_crosssectional_binary( p = 0.30, precision = 0.05, dropout_rate =
+0.10 )
+
+## Launching the app
+
+{r, eval = FALSE} library(PICOTsize) run_app()
+
+## Reference
+
+Bhardwaj R, Agrawal U, Vashist P, Manna S. Determination of sample size
+for various study designs in medical research: A practical primer. *J
+Family Med Prim Care*. 2024;13:2555-61.

@@ -1,0 +1,26 @@
+citHeader("To cite PICOTsize in publications, please cite the software itself and, where relevant, the underlying sample size methodology paper:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "PICOTsize: PICOT-based sample size calculation for epidemiological study designs",
+  author   = c(person(given = "Atefeh", family = "Rashidi Pour")),
+  year     = format(Sys.Date(), "%Y"),
+  note     = "R package",
+  url      = "https://github.com/AtefehRashidi/PICOTsize"
+)
+
+bibentry(
+  bibtype  = "Article",
+  title    = "Determination of sample size for various study designs in medical research: A practical primer",
+  author   = c(
+    person(given = "Reena", family = "Bhardwaj"),
+    person(given = "Usha", family = "Agrawal"),
+    person(given = "Praveen", family = "Vashist"),
+    person(given = "Souvik", family = "Manna")
+  ),
+  journal  = "Journal of Family Medicine and Primary Care",
+  year     = "2024",
+  volume   = "13",
+  pages    = "2555--2561",
+  doi      = "10.4103/jfmpc.jfmpc_1675_23"
+)
