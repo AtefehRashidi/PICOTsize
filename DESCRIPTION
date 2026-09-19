@@ -1,19 +1,26 @@
 Package: PICOTsize
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Sample Size Calculation for PICOT-Based Study Designs
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Atefeh", "Rashidi Pour",
+      email = "rashidiatefeh98@gmail.com",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Description: Provides sample size calculators for the study designs
+    covered by the PICOT framework, including cross-sectional,
+    case-control, cohort, superiority, non-inferiority, and
+    equivalence clinical trials, and diagnostic test accuracy
+    studies, following Bhardwaj et al. (2024)
+    <doi:10.4103/jfmpc.jfmpc_1675_23>. Calculations are performed
+    using the 'epiR' package as a validated computational backend.
+    Includes a 'shiny' application with a PICOT-based design
+    wizard, an interactive sensitivity plot, and automatically
+    generated Methods-section text for manuscripts.
 License: MIT + file LICENSE
 Encoding: UTF-8
-LazyData: true
 Imports: 
     bslib,
     epiR,
@@ -26,5 +33,7 @@ Suggests:
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+URL: https://github.com/AtefehRashidi/PICOTsize, https://orcid.org/0009-0002-3834-3183
+BugReports: https://github.com/AtefehRashidi/PICOTsize/issues
 Config/testthat/edition: 3
 VignetteBuilder: knitr

@@ -1,11 +1,10 @@
 
-{r, include = FALSE} knitr::opts_chunk\$set( collapse = TRUE, comment =
-“\#\>”, fig.path = “man/figures/README-” )
-
 # PICOTsize
 
+<img src="man/figures/hex.png" align="right" height="150"/>
 <!-- badges: start -->
 
+[![ORCID](https://img.shields.io/badge/ORCID-0009--0002--3834--3183-a6ce39?logo=orcid&logoColor=white)](https://orcid.org/0009-0002-3834-3183)
 <!-- badges: end -->
 
 PICOTsize is an R package and Shiny app for calculating sample sizes
@@ -28,25 +27,41 @@ package’s output differs from the paper (and why).
 You can install the development version of PICOTsize from
 [GitHub](https://github.com/AtefehRashidi) with:
 
-{r, eval = FALSE} \# install.packages(“remotes”)
-remotes::install_github(“your-username/PICOTsize”)
+``` r
+# install.packages("remotes")
+remotes::install_github("AtefehRashidi/PICOTsize")
+```
 
 ## Using the package directly
 
 Every calculation is available as a plain R function, independent of the
 Shiny app:
 
-{r example} library(PICOTsize)
+``` r
+library(PICOTsize)
 
-calc_crosssectional_binary( p = 0.30, precision = 0.05, dropout_rate =
-0.10 )
+calc_crosssectional_binary(
+  p = 0.30,
+  precision = 0.05,
+  dropout_rate = 0.10
+)
+```
 
 ## Launching the app
 
-{r, eval = FALSE} library(PICOTsize) run_app()
+``` r
+library(PICOTsize)
+run_app()
+```
 
 ## Reference
 
 Bhardwaj R, Agrawal U, Vashist P, Manna S. Determination of sample size
 for various study designs in medical research: A practical primer. *J
 Family Med Prim Care*. 2024;13:2555-61.
+
+## Contributing
+
+Contributions are welcome! If you find a bug, have a suggestion, or
+would like to request a new feature, please open an issue on the GitHub
+repository.
